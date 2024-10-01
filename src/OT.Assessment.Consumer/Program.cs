@@ -5,15 +5,16 @@ using RabbitMQ.Client;
 using OT.Assessment.Consumer.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration(config =>
     {
         config.SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
+              .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+              .Build();
     })
-     .ConfigureServices((hostContext, services) =>
+    .ConfigureServices((hostContext, services) =>
     {
         // Configure DbContext
         services.AddDbContext<ApplicationDbContext>(options =>
@@ -23,9 +24,12 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IConnectionFactory>(sp =>
             new ConnectionFactory
             {
-                HostName = hostContext.Configuration["RabbitMQ:HostName"],
-                UserName = hostContext.Configuration["RabbitMQ:UserName"],
-                Password = hostContext.Configuration["RabbitMQ:Password"]
+                HostName = hostContext.Configuration["RabbitMQ:HostName"] 
+                    ?? throw new ArgumentNullException("RabbitMQ HostName is missing"),
+                UserName = hostContext.Configuration["RabbitMQ:UserName"] 
+                    ?? throw new ArgumentNullException("RabbitMQ UserName is missing"),
+                Password = hostContext.Configuration["RabbitMQ:Password"] 
+                    ?? throw new ArgumentNullException("RabbitMQ Password is missing")
             });
 
         services.AddSingleton<IConnection>(sp =>
@@ -42,10 +46,7 @@ var host = Host.CreateDefaultBuilder(args)
         logging.ClearProviders();
         logging.AddConsole();
     })
+    .Build(); 
 
-var logger = host.Services.GetRequiredService<ILogger<Program>>();
-logger.LogInformation("Application started {time:yyyy-MM-dd HH:mm:ss}", DateTime.Now);
-
+// Run the host
 await host.RunAsync();
-
-logger.LogInformation("Application ended {time:yyyy-MM-dd HH:mm:ss}", DateTime.Now);
