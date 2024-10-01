@@ -24,6 +24,11 @@ namespace OT.Assessment.App.Data
             modelBuilder.Entity<CasinoWager>()
                 .HasKey(w => w.WagerId);
 
+            // Specify decimal precision and scale for the Amount property
+            modelBuilder.Entity<CasinoWager>()
+                .Property(w => w.Amount)
+                .HasColumnType("decimal(18, 2)"); // Adjust precision and scale as needed
+
             // Configure relationships
             modelBuilder.Entity<CasinoWager>()
                 .HasOne(w => w.Player)

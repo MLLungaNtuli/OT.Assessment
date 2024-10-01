@@ -1,15 +1,40 @@
 version: "3.0"
+
 services:
   rabbit:
-     container_name: dev_rabbit
-     hostname: rabbit
-     image: rabbitmq:3.12-management
-     environment:
-        - RABBITMQ_DEFAULT_USER=guest
-        - RABBITMQ_DEFAULT_PASS=guest
-     ports:
-        - "5672:5672"
-        - "15672:15672"
+    container_name: dev_rabbit
+    hostname: rabbit
+    image: rabbitmq:3.12-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - rb-net  # Added the network for the rabbit service
+
+  api:
+    build: ./OT.Assessment.App
+    depends_on:
+      - rabbit
+      - sqlserver
+    ports:
+      - "5000:80"
+    networks:
+      - rb-net  # Added the network for the api service
+
+  consumer:
+    build: ./OT.Assessment.Consumer
+    depends_on:
+      - rabbit
+      - sqlserver
+    networks:
+      - rb-net  # Added the network for the consumer service
+
 networks:
   rb-net:
     driver: bridge
+
+volumes:
+  sqlserverdata:
