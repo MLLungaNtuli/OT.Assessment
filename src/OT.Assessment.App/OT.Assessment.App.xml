@@ -16,5 +16,17 @@
         <member name="M:OT.Assessment.App.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:OT.Assessment.App.Migrations.AddIndexesToCasinoWager">
+            <inheritdoc />
+        </member>
+        <member name="M:OT.Assessment.App.Migrations.AddIndexesToCasinoWager.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:OT.Assessment.App.Migrations.AddIndexesToCasinoWager.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:OT.Assessment.App.Migrations.AddIndexesToCasinoWager.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

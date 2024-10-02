@@ -34,6 +34,19 @@ namespace OT.Assessment.App.Data
                 .HasOne(w => w.Player)
                 .WithMany(p => p.CasinoWagers)
                 .HasForeignKey(w => w.AccountId);
+
+            // Add indexes for frequently queried columns
+             modelBuilder.Entity<CasinoWager>()
+                .HasIndex(w => w.AccountId)
+                .HasDatabaseName("IX_CasinoWager_AccountId");
+
+            modelBuilder.Entity<CasinoWager>()
+                .HasIndex(w => w.WagerId)
+                .HasDatabaseName("IX_CasinoWager_WagerId");
+
+             modelBuilder.Entity<Player>()
+                .HasIndex(p => p.AccountId)
+                .HasDatabaseName("IX_Player_AccountId");
         }
     }
 }

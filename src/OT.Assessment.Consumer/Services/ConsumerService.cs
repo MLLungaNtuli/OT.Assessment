@@ -31,7 +31,10 @@ namespace OT.Assessment.Consumer.Services
                                  durable: true,
                                  exclusive: false,
                                  autoDelete: false,
-                                 arguments: null);
+                                 arguments: new Dictionary<string, object>  //Implement a Dead Letter Queue (DLQ) for handling failed messages in RabbitMQ.
+                                {
+                                { "x-dead-letter-exchange", "casino_wager_dead" }
+                                });
             _channel.BasicQos(prefetchSize: 0, prefetchCount: 10, global: false); // Adjust prefetch count as needed
             return base.StartAsync(cancellationToken);
         }

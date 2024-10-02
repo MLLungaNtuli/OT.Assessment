@@ -50,7 +50,10 @@ namespace OT.Assessment.App.Controllers
                                  durable: true,
                                  exclusive: false,
                                  autoDelete: false,
-                                 arguments: null);
+                                 arguments: new Dictionary<string, object>  //Implement a Dead Letter Queue (DLQ) for handling failed messages in RabbitMQ.
+                                {
+                                { "x-dead-letter-exchange", "casino_wager_dead" }
+                                });
 
             var message = JsonSerializer.Serialize(wager);
             var body = Encoding.UTF8.GetBytes(message);
