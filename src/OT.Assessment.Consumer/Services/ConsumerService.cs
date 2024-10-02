@@ -70,7 +70,6 @@ namespace OT.Assessment.Consumer.Services
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error processing message.");
-                    // Optionally, implement retry logic or move message to a dead-letter queue
                 }
 
                 // Acknowledge message

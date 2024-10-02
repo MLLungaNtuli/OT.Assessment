@@ -20,8 +20,6 @@ namespace OT.Assessment.App.Models
         public string CountryCode { get; set; }
         public string SessionData { get; set; }
         public long Duration { get; set; }
-
-        // Navigation property
         public Player Player { get; set; }
     }
 }

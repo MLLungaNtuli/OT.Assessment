@@ -7,8 +7,6 @@ namespace OT.Assessment.App.Models
     {
         public Guid AccountId { get; set; }
         public string Username { get; set; }
-
-        // Navigation property
         public List<CasinoWager> CasinoWagers { get; set; }
     }
 }

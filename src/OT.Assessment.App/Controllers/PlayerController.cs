@@ -31,7 +31,7 @@ namespace OT.Assessment.App.Controllers
                 return BadRequest("Wager data is null.");
             }
 
-            // Ensure Player exists
+            // Ensure or check if Player exists
             var player = await _dbContext.Players.FindAsync(wager.AccountId);
             if (player == null)
             {
@@ -44,7 +44,7 @@ namespace OT.Assessment.App.Controllers
                 await _dbContext.SaveChangesAsync();
             }
 
-            // Publish to RabbitMQ
+            // Here we Publish to RabbitMQ
             using var channel = _rabbitConnection.CreateModel();
             channel.QueueDeclare(queue: "casino_wager",
                                  durable: true,
@@ -73,6 +73,7 @@ namespace OT.Assessment.App.Controllers
         [HttpGet("{playerId}/casino")]
         public async Task<IActionResult> GetPlayerWagers(Guid playerId, int pageSize = 10, int page = 1)
         {
+            //The use of pagination in the GetPlayerWagers endpoint ensures that the data is retrieved in an optimized way
             var total = await _dbContext.CasinoWagers.CountAsync(w => w.AccountId == playerId);
             var totalPages = (int)Math.Ceiling(total / (double)pageSize);
 
@@ -107,6 +108,9 @@ namespace OT.Assessment.App.Controllers
         [HttpGet("topSpenders")]
         public async Task<IActionResult> GetTopSpenders(int count = 10)
         {
+        // Retrieves the top spenders data from the CasinoWagers table.
+          // The query groups the wagers by AccountId and Username,
+            // then calculates the total amount spent for each player.    
             var topSpenders = await _dbContext.CasinoWagers
                 .GroupBy(w => new { w.AccountId, w.Username })
                 .Select(g => new
