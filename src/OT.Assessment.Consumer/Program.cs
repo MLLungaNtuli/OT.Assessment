@@ -30,7 +30,10 @@ var host = Host.CreateDefaultBuilder(args)
                 UserName = hostContext.Configuration["RabbitMQ:UserName"] 
                     ?? throw new ArgumentNullException("RabbitMQ UserName is missing"),
                 Password = hostContext.Configuration["RabbitMQ:Password"] 
-                    ?? throw new ArgumentNullException("RabbitMQ Password is missing")
+                    ?? throw new ArgumentNullException("RabbitMQ Password is missing"),
+                Port = 5672, // Set the port to the default RabbitMQ port
+                RequestedConnectionTimeout = TimeSpan.FromMinutes(5) // Set the connection timeout
+
             });
 
         services.AddSingleton<IConnection>(sp =>

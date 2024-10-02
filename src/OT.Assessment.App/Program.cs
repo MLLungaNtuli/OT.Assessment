@@ -15,13 +15,26 @@ builder.Services.AddSingleton<IConnectionFactory>(sp =>
     {
         HostName = builder.Configuration["RabbitMQ:HostName"] ?? throw new ArgumentNullException("RabbitMQ HostName is missing"),
         UserName = builder.Configuration["RabbitMQ:UserName"] ?? throw new ArgumentNullException("RabbitMQ UserName is missing"),
-        Password = builder.Configuration["RabbitMQ:Password"] ?? throw new ArgumentNullException("RabbitMQ Password is missing")
+        Password = builder.Configuration["RabbitMQ:Password"] ?? throw new ArgumentNullException("RabbitMQ Password is missing"),
+        Port = 5672, // Set the port to the default RabbitMQ port
+        RequestedConnectionTimeout = TimeSpan.FromMinutes(5) // Set the connection timeout
     });
 
 builder.Services.AddSingleton<IConnection>(sp =>
 {
     var factory = sp.GetRequiredService<IConnectionFactory>();
     return factory.CreateConnection();
+});
+
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
 });
 
 builder.Services.AddControllers();
@@ -66,7 +79,13 @@ else
     app.UseExceptionHandler("/Home/Error");
 }
 
+app.UseHsts();
 app.UseHttpsRedirection();
+
+
+// Use CORS
+app.UseCors("AllowAll");
+
 app.UseAuthorization();
 app.MapControllers();
 

@@ -6,9 +6,13 @@ var total = bg.Generate();
 var scenario = Scenario.Create("hello_world_scenario", async context =>
     {
         var body = JsonSerializer.Serialize(total[(int)context.InvocationNumber]);
-        using var httpClient = new HttpClient();
+         // Increase timeout to 5 minutes
+    using var httpClient = new HttpClient
+    {
+        Timeout = TimeSpan.FromMinutes(5) // Set timeout to 5 minutes
+    };
         var request =
-            Http.CreateRequest("POST", "https://localhost:7120/api/Player/CasinoWager")
+            Http.CreateRequest("POST", "http://localhost:5021/api/Player/CasinoWager")
                 .WithHeader("Accept", "application/json")
                 .WithBody(new StringContent($"{body}", Encoding.UTF8, "application/json"));
 
