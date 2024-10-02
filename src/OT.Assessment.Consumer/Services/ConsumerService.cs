@@ -1,11 +1,12 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using OT.Assessment.Consumer.Data;
-using OT.Assessment.App.Models;
+using OT.Assessment.App.Models; // Use the CasinoWager from App.Models
+using OT.Assessment.App.Data;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace OT.Assessment.Consumer.Services
 {
@@ -45,7 +46,7 @@ namespace OT.Assessment.Consumer.Services
 
                 try
                 {
-                    var wager = JsonSerializer.Deserialize<CasinoWager>(message);
+                    var wager = JsonSerializer.Deserialize<CasinoWager>(message); // Use the CasinoWager from OT.Assessment.App.Models
 
                     if (wager != null)
                     {

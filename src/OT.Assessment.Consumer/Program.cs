@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using OT.Assessment.Consumer.Data;
 using RabbitMQ.Client;
 using OT.Assessment.Consumer.Services;
+using OT.Assessment.App.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration(config =>
